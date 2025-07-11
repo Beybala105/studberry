@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Студберри - Помощник в обучении</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .auth-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .banner h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .user-profiles {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .profile-card {
+            min-width: 150px;
+            background-color: var(--card-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: var(--text-color);
+        }
+
+        .profile-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-card p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .event-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .event-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .event-card h2 i {
+            color: var(--accent-color);
+        }
+
+        .event-details {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-date {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .university-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .recommendation-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recommendation-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .subject-tag {
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .recommendations {
+                grid-template-columns: 1fr;
+            }
+
+            .user-profiles {
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+
+            .profile-card {
+                min-width: calc(50% - 0.5rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-card {
+                min-width: 100%;
+            }
+
+            .event-details {
+                flex-direction: column;
+            }
+        }
+
+/* Добавляем стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .auth-switch {
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Студ<span>берри</span></div>
+        
+        <nav>
+    <a href="index.html">Главная</a>
+    <a href="schedule.html">Расписание</a>
+    <a href="grades.html">Оценки</a>
+    <a href="subjects.html">Предметы</a>
+    <a href="resources.html">Ресурсы</a>
+    <a href="profile.html">Профиль</a>
+</nav>
+        
+        <button class="auth-btn">
+            <i class="fas fa-user"></i>
+            Войти
+        </button>
+        
+        <div class="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </header>
+
+ <!-- Модальное окно входа/регистрации -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeAuthModal">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Вход / Регистрация</h2>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Вход</div>
+                <div class="auth-tab" data-tab="register">Регистрация</div>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Пароль</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Войти</button>
+                </form>
+                
+                <div class="auth-footer">
+                    Нет аккаунта? <span class="auth-switch" data-tab="register">Зарегистрируйтесь</span>
+                </div>
+            </div>
+            
+            <div class="auth-form" id="registerForm">
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label for="registerName">Имя</label>
+                        <input type="text" id="registerName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Пароль</label>
+                        <input type="password" id="registerPassword" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Подтвердите пароль</label>
+                        <input type="password" id="registerConfirmPassword" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Зарегистрироваться</button>
+                </form>
+                
+                <div class="auth-footer">
+                    Уже есть аккаунт? <span class="auth-switch" data-tab="login">Войдите</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="banner">
+            <h2>Популярные профили для подписки</h2>
+            <div class="user-profiles">
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Профиль">
+                    <h3>Анна Петрова</h3>
+                    <p>СЗГМУ им. Мечникова</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.8rem;">Подписаться</button>
+                </div>
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Профиль">
+                    <h3>Иван Сидоров</h3>
+                    <p>ПСПбГМУ им. Павлова</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.8rem;">Подписаться</button>
+                </div>
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Профиль">
+                    <h3>Мария Иванова</h3>
+                    <p>МГМУ им. Сеченова</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.8rem;">Подписаться</button>
+                </div>
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Профиль">
+                    <h3>Алексей Смирнов</h3>
+                    <p>РНИМУ им. Пирогова</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.8rem;">Подписаться</button>
+                </div>
+                <div class="profile-card">
+                    <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Профиль">
+                    <h3>Елена Кузнецова</h3>
+                    <p>СЗГМУ им. Мечникова</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem; font-size: 0.8rem;">Подписаться</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="event-card">
+            <h2><i class="fas fa-calendar-alt"></i> Ближайшее событие</h2>
+            <select class="university-select">
+                <option value="szgmu">СЗГМУ им. И.И. Мечникова</option>
+                <option value="pspbmu">ПСПбГМУ им. Павлова</option>
+                <option value="msmu">МГМУ им. Сеченова</option>
+                <option value="rnimu">РНИМУ им. Пирогова</option>
+            </select>
+            <div class="event-details">
+                <div class="event-date">22 мая</div>
+                <div>
+                    <h3>Экзамен по анатомии</h3>
+                    <p>Преподаватель: Ляучево А.В.</p>
+                    <p>Осталось: 22 дня</p>
+                </div>
+            </div>
+            <button class="btn btn-primary">Добавить в календарь</button>
+        </div>
+
+        <h2 style="margin-bottom: 1rem;">Рекомендации для вас</h2>
+        <div class="recommendations">
+            <div class="recommendation-card">
+                <h3>Карточки по анатомии</h3>
+                <p>Кости туловища и конечностей - основные термины и понятия</p>
+                <div class="card-footer">
+                    <span class="subject-tag">Анатомия</span>
+                    <button class="btn btn-outline">Изучить</button>
+                </div>
+            </div>
+            <div class="recommendation-card">
+                <h3>Тест по биологии</h3>
+                <p>Основы генетики и молекулярной биологии - проверь свои знания</p>
+                <div class="card-footer">
+                    <span class="subject-tag">Биология</span>
+                    <button class="btn btn-outline">Пройти</button>
+                </div>
+            </div>
+            <div class="recommendation-card">
+                <h3>Профиль: Алияров Б.</h3>
+                <p>Студент СЗГМУ, делится материалами по гистологии и анатомии</p>
+                <div class="card-footer">
+                    <span class="subject-tag">Сообщество</span>
+                    <button class="btn btn-outline">Посмотреть</button>
+                </div>
+            </div>
+            <div class="recommendation-card">
+                <h3>Видео по биохимии</h3>
+                <p>Метаболизм углеводов - полный разбор темы с примерами</p>
+                <div class="card-footer">
+                    <span class="subject-tag">Биохимия</span>
+                    <button class="btn btn-outline">Смотреть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Бургер-меню
+        document.querySelector('.burger-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('mobile-visible');
+        });
+
+        // Модальное окно входа/регистрации
+        const authModal = document.getElementById('authModal');
+        const openAuthModalBtn = document.getElementById('openAuthModal');
+        const closeAuthModalBtn = document.getElementById('closeAuthModal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const authSwitches = document.querySelectorAll('.auth-switch');
+
+        openAuthModalBtn.addEventListener('click', function() {
+            authModal.style.display = 'block';
+        });
+
+        closeAuthModalBtn.addEventListener('click', function() {
+            authModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+
+        // Переключение между вкладками входа и регистрации
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Удаляем активный класс у всех вкладок и форм
+                authTabs.forEach(t => t.classList.remove('active'));
+                authForms.forEach(f => f.classList.remove('active'));
+                
+                // Добавляем активный класс текущей вкладке и форме
+                this.classList.add('active');
+                document.getElementById(tabId + 'Form').classList.add('active');
+            });
+        });
+
+        // Переключение между формами через ссылки
+        authSwitches.forEach(switcher => {
+            switcher.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Удаляем активный класс у всех вкладок и форм
+                authTabs.forEach(t => t.classList.remove('active'));
+                authForms.forEach(f => f.classList.remove('active'));
+                
+                // Добавляем активный класс выбранной вкладке и форме
+                document.querySelector(`.auth-tab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId + 'Form').classList.add('active');
+            });
+        });
+
+        // Обработка формы входа
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Здесь должна быть логика входа
+            console.log('Вход:', { email, password });
+            
+            // После успешного входа:
+            alert('Вход выполнен успешно!');
+            authModal.style.display = 'none';
+            // Можно обновить интерфейс, показать данные пользователя и т.д.
+        });
+
+        // Обработка формы регистрации
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают!');
+                return;
+            }
+            
+            // Здесь должна быть логика регистрации
+            console.log('Регистрация:', { name, email, password });
+            
+            // После успешной регистрации:
+            alert('Регистрация завершена успешно! Теперь вы можете войти.');
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+        });
+
+        // Делаем все кнопки кликабельными (пример для главной страницы)
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Здесь можно добавить логику для каждой кнопки
+                console.log('Кнопка нажата:', this.textContent.trim());
+                
+                // Пример обработки кнопки "Подписаться"
+                if (this.textContent.trim() === 'Подписаться') {
+                    this.textContent = 'Подписка оформлена';
+                    this.classList.remove('btn-outline');
+                    this.classList.add('btn-primary');
+                    this.style.backgroundColor = '#4caf50'; // Зеленый цвет для успешного действия
+                }
+            });
+        });
+// Делаем все кнопки кликабельными
+document.querySelectorAll('.btn, .edit-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Базовая обработка клика
+        console.log('Кнопка нажата:', this.textContent.trim());
+        
+        // Можно добавить специфическую логику для отдельных кнопок
+        if (this.textContent.trim() === 'Подписаться') {
+            this.textContent = 'Подписка оформлена';
+            this.classList.remove('btn-outline');
+            this.classList.add('btn-primary');
+            this.style.backgroundColor = '#4caf50';
+        }
+    });
+});
+    </script>
+</body>
+</html>

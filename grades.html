@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оценки | Студберри</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Общие стили из index.html */
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .auth-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Стили для страницы оценок */
+        .grades-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .grades-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .grade {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .grade.excellent {
+            color: #4caf50;
+        }
+
+        .grade.good {
+            color: #8bc34a;
+        }
+
+        .grade.satisfactory {
+            color: #ffc107;
+        }
+
+        .grade.unsatisfactory {
+            color: #f44336;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .grades-table th, .grades-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grades-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .grades-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .subject-details {
+            margin-top: 2rem;
+        }
+
+        .detail-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .detail-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .grade-5 {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .grade-4 {
+            background-color: #f1f8e9;
+            color: #8bc34a;
+        }
+
+        .grade-3 {
+            background-color: #fff8e1;
+            color: #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .grades-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .grades-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Студ<span>берри</span></div>
+        
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="schedule.html">Расписание</a>
+            <a href="grades.html" class="active">Оценки</a>
+            <a href="subjects.html">Предметы</a>
+            <a href="resources.html">Ресурсы</a>
+        </nav>
+        
+        <button class="auth-btn">
+            <i class="fas fa-user"></i>
+            Войти
+        </button>
+        
+        <div class="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grades-header">
+            <h1>Оценки</h1>
+            <button class="btn btn-primary">Добавить оценку</button>
+        </div>
+
+        <div class="grades-summary">
+            <div class="summary-card">
+                <h3>Анатомия</h3>
+                <div class="grade excellent">84</div>
+                <p>Средний балл: 4.25</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 84%;"></div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Биология</h3>
+                <div class="grade good">73</div>
+                <p>Средний балл: 4.25</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 73%;"></div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Физика</h3>
+                <div class="grade satisfactory">66</div>
+                <p>Средний балл: 4.25</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 66%;"></div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Биохимия</h3>
+                <div class="grade excellent">88</div>
+                <p>Средний балл: 4.75</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 88%;"></div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Латинский</h3>
+                <div class="grade unsatisfactory">54</div>
+                <p>Средний балл: 3.5</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 54%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <table class="grades-table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Текущие</th>
+                    <th>Баллы</th>
+                    <th>Ср. балл</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Анатомия</td>
+                    <td>4, 3, 5, 5, 4, 5, 3</td>
+                    <td>84</td>
+                    <td>4.25</td>
+                    <td><button class="btn btn-outline">Подробнее</button></td>
+                </tr>
+                <tr>
+                    <td>Биология</td>
+                    <td>4, 3, 5, 5, 4, 5, 3</td>
+                    <td>73</td>
+                    <td>4.25</td>
+                    <td><button class="btn btn-outline">Подробнее</button></td>
+                </tr>
+                <tr>
+                    <td>Физика</td>
+                    <td>4, 3, 5, 5, 4, 5, 3</td>
+                    <td>66</td>
+                    <td>4.25</td>
+                    <td><button class="btn btn-outline">Подробнее</button></td>
+                </tr>
+                <tr>
+                    <td>Биохимия</td>
+                    <td>4, 3, 5, 5, 4, 5, 3</td>
+                    <td>88</td>
+                    <td>4.75</td>
+                    <td><button class="btn btn-outline">Подробнее</button></td>
+                </tr>
+                <tr>
+                    <td>Латинский</td>
+                    <td>4, 3, 5, 5, 4, 5, 3</td>
+                    <td>54</td>
+                    <td>3.5</td>
+                    <td><button class="btn btn-outline">Подробнее</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subject-details">
+            <div class="detail-card">
+                <h2>Анатомия</h2>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>12.05</strong> - Анатомия
+                    </div>
+                    <span class="grade-badge grade-5">5</span>
+                </div>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>10.03</strong> - Желудок, тонкая кишка, печень
+                    </div>
+                    <span class="grade-badge grade-5">5</span>
+                </div>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>17.03</strong> - Толстая кишка, брюшина
+                    </div>
+                    <span class="grade-badge grade-3">3</span>
+                </div>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>31.03</strong> - Дыхательная система
+                    </div>
+                    <span class="grade-badge grade-5">5</span>
+                </div>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>07.04</strong> - Сердце, круги кровообращения
+                    </div>
+                    <span class="grade-badge grade-4">4</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <h2>Биология</h2>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>13.05</strong> - Биология
+                    </div>
+                    <span class="grade-badge grade-4">4</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <h2>Физика</h2>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>13.05</strong> - Физика
+                    </div>
+                    <span class="grade-badge grade-3">3</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <h2>Биохимия</h2>
+                
+                <div class="detail-item">
+                    <div>
+                        <strong>13.05</strong> - Биохимия
+                    </div>
+                    <span class="grade-badge grade-5">5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Бургер-меню
+        document.querySelector('.burger-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('mobile-visible');
+        });
+    </script>
+</body>
+</html>

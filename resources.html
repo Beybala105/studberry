@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ресурсы | Студберри</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Общие стили из index.html */
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .auth-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Стили для страницы ресурсов */
+        .resources-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab:hover:not(.active) {
+            border-bottom-color: #ccc;
+        }
+
+        .resource-content {
+            display: none;
+        }
+
+        .resource-content.active {
+            display: block;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .video-card {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .video-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        .deck-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .deck-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .deck-info {
+            flex-grow: 1;
+        }
+
+        .deck-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .test-card {
+            position: relative;
+        }
+
+        .test-progress {
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .file-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .file-info {
+            flex-grow: 1;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .resource-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .tab {
+                white-space: nowrap;
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Студ<span>берри</span></div>
+        
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="schedule.html">Расписание</a>
+            <a href="grades.html">Оценки</a>
+            <a href="subjects.html">Предметы</a>
+            <a href="resources.html" class="active">Ресурсы</a>
+        </nav>
+        
+        <button class="auth-btn">
+            <i class="fas fa-user"></i>
+            Войти
+        </button>
+        
+        <div class="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="resources-header">
+            <h1>Ресурсы</h1>
+            <button class="btn btn-primary">Добавить ресурс</button>
+        </div>
+
+        <div class="resource-tabs">
+            <div class="tab active" data-tab="video">Видео</div>
+            <div class="tab" data-tab="cards">Карточки</div>
+            <div class="tab" data-tab="tests">Тесты</div>
+            <div class="tab" data-tab="files">Файлы</div>
+        </div>
+
+        <div class="resource-content active" id="video-content">
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <div class="video-card">
+                        <img src="https://via.placeholder.com/400x225" alt="Превью видео">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <h3>Кости туловища</h3>
+                    <p>Полный разбор анатомии костей туловища человека с примерами и 3D-моделями.</p>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-eye"></i> 1.2K</span>
+                        <span><i class="fas fa-clock"></i> 15:42</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Смотреть</button>
+                        <button class="btn btn-outline">В плейлист</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="video-card">
+                        <img src="https://via.placeholder.com/400x225" alt="Превью видео">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <h3>Мышцы спины</h3>
+                    <p>Подробный обзор анатомии мышц спины, их функций и иннервации.</p>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-eye"></i> 856</span>
+                        <span><i class="fas fa-clock"></i> 22:18</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Смотреть</button>
+                        <button class="btn btn-outline">В плейлист</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="video-card">
+                        <img src="https://via.placeholder.com/400x225" alt="Превью видео">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <h3>Сердце и кровообращение</h3>
+                    <p>Анатомия сердца и круги кровообращения с клиническими примерами.</p>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-eye"></i> 1.5K</span>
+                        <span><i class="fas fa-clock"></i> 18:33</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Смотреть</button>
+                        <button class="btn btn-outline">В плейлист</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="video-card">
+                        <img src="https://via.placeholder.com/400x225" alt="Превью видео">
+                        <div class="play-icon"><i class="fas fa-play"></i></div>
+                    </div>
+                    <h3>Метаболизм углеводов</h3>
+                    <p>Биохимия метаболизма углеводов: гликолиз, цикл Кребса и окислительное фосфорилирование.</p>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-eye"></i> 723</span>
+                        <span><i class="fas fa-clock"></i> 25:07</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Смотреть</button>
+                        <button class="btn btn-outline">В плейлист</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-content" id="cards-content">
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <div class="deck-card">
+                        <div class="deck-icon"><i class="fas fa-clone"></i></div>
+                        <div class="deck-info">
+                            <h3>Кости туловища</h3>
+                            <div class="deck-stats">
+                                <div class="stat-item"><i class="fas fa-cards"></i> 42</div>
+                                <div class="stat-item"><i class="fas fa-check-circle"></i> 85%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Основные термины и понятия по анатомии костей туловища.</p>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Учить</button>
+                        <button class="btn btn-outline">Редактировать</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="deck-card">
+                        <div class="deck-icon"><i class="fas fa-clone"></i></div>
+                        <div class="deck-info">
+                            <h3>Мышцы спины</h3>
+                            <div class="deck-stats">
+                                <div class="stat-item"><i class="fas fa-cards"></i> 36</div>
+                                <div class="stat-item"><i class="fas fa-check-circle"></i> 72%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Названия, функции и иннервация мышц спины.</p>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Учить</button>
+                        <button class="btn btn-outline">Редактировать</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="deck-card">
+                        <div class="deck-icon"><i class="fas fa-clone"></i></div>
+                        <div class="deck-info">
+                            <h3>Сердце и кровообращение</h3>
+                            <div class="deck-stats">
+                                <div class="stat-item"><i class="fas fa-cards"></i> 28</div>
+                                <div class="stat-item"><i class="fas fa-check-circle"></i> 65%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Анатомия сердца, круги кровообращения и основные термины.</p>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Учить</button>
+                        <button class="btn btn-outline">Редактировать</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="deck-card">
+                        <div class="deck-icon"><i class="fas fa-clone"></i></div>
+                        <div class="deck-info">
+                            <h3>Медицинские термины</h3>
+                            <div class="deck-stats">
+                                <div class="stat-item"><i class="fas fa-cards"></i> 54</div>
+                                <div class="stat-item"><i class="fas fa-check-circle"></i> 91%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Основные латинские и греческие термины в медицине.</p>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Учить</button>
+                        <button class="btn btn-outline">Редактировать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-content" id="tests-content">
+            <div class="resource-grid">
+                <div class="resource-card test-card">
+                    <h3>Тест по анатомии: Кости</h3>
+                    <p>Проверьте свои знания по анатомии костей туловища и конечностей.</p>
+                    <div class="test-progress">
+                        <div class="progress-bar" style="width: 65%;"></div>
+                    </div>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-question"></i> 20 вопросов</span>
+                        <span>65% завершено</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                        <button class="btn btn-outline">Начать заново</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card test-card">
+                    <h3>Тест по биологии: Генетика</h3>
+                    <p>Основы генетики и молекулярной биологии - проверка знаний.</p>
+                    <div class="test-progress">
+                        <div class="progress-bar" style="width: 40%;"></div>
+                    </div>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-question"></i> 15 вопросов</span>
+                        <span>40% завершено</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Продолжить</button>
+                        <button class="btn btn-outline">Начать заново</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card test-card">
+                    <h3>Тест по биохимии: Метаболизм</h3>
+                    <p>Метаболизм углеводов, липидов и белков - проверка знаний.</p>
+                    <div class="test-progress">
+                        <div class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-question"></i> 25 вопросов</span>
+                        <span>Не начато</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Начать</button>
+                        <button class="btn btn-outline" disabled>Начать заново</button>
+                    </div>
+                </div>
+                
+                <div class="resource-card test-card">
+                    <h3>Тест по физике: Механика</h3>
+                    <p>Основы механики - законы Ньютона, кинематика, динамика.</p>
+                    <div class="test-progress">
+                        <div class="progress-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="resource-meta">
+                        <span><i class="fas fa-question"></i> 30 вопросов</span>
+                        <span>100% завершено</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn btn-primary">Результаты</button>
+                        <button class="btn btn-outline">Начать заново</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resource-content" id="files-content">
+            <div class="file-card">
+                <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+                <div class="file-info">
+                    <h3>Конспект по анатомии</h3>
+                    <p class="file-size">PDF, 2.4 MB</p>
+                </div>
+                <button class="btn btn-outline"><i class="fas fa-download"></i></button>
+            </div>
+            
+            <div class="file-card">
+                <div class="file-icon"><i class="fas fa-file-word"></i></div>
+                <div class="file-info">
+                    <h3>Лекции по биохимии</h3>
+                    <p class="file-size">DOCX, 1.8 MB</p>
+                </div>
+                <button class="btn btn-outline"><i class="fas fa-download"></i></button>
+            </div>
+            
+            <div class="file-card">
+                <div class="file-icon"><i class="fas fa-file-powerpoint"></i></div>
+                <div class="file-info">
+                    <h3>Презентация: Мышцы спины</h3>
+                    <p class="file-size">PPTX, 5.2 MB</p>
+                </div>
+                <button class="btn btn-outline"><i class="fas fa-download"></i></button>
+            </div>
+            
+            <div class="file-card">
+                <div class="file-icon"><i class="fas fa-file-image"></i></div>
+                <div class="file-info">
+                    <h3>Схемы: Кровообращение</h3>
+                    <p class="file-size">PNG, 3.1 MB</p>
+                </div>
+                <button class="btn btn-outline"><i class="fas fa-download"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Бургер-меню
+        document.querySelector('.burger-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('mobile-visible');
+        });
+
+        // Переключение вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Удаляем активный класс у всех вкладок и контента
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.resource-content').forEach(c => c.classList.remove('active'));
+                
+                // Добавляем активный класс текущей вкладке и соответствующему контенту
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId + '-content').classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
