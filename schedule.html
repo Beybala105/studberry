@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание | Студберри</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .auth-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Стили для страницы расписания */
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .schedule-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .schedule-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .day-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .day-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .subject-list {
+            list-style-type: none;
+        }
+
+        .subject-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-item:last-child {
+            border-bottom: none;
+        }
+
+        .subject-time {
+            font-size: 0.9rem;
+            color: #666;
+            margin-right: 1rem;
+        }
+
+        .subject-info {
+            flex-grow: 1;
+        }
+
+        .subject-name {
+            font-weight: 500;
+        }
+
+        .subject-teacher {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .subject-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+
+        .exam-notice {
+            background-color: #fff8e1;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border-left: 4px solid #ffc107;
+        }
+
+        .deadline {
+            background-color: #ffebee;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border-left: 4px solid #f44336;
+        }
+
+        .deadline h3 {
+            color: #f44336;
+            margin-bottom: 0.5rem;
+        }
+
+        .deadline p {
+            font-size: 0.9rem;
+        }
+
+        .calendar {
+            margin-top: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .calendar-day {
+            background-color: var(--card-color);
+            padding: 0.8rem;
+            text-align: center;
+            border-radius: 5px;
+            min-height: 80px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .calendar-day.empty {
+            background-color: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .calendar-day.today {
+            background-color: #e3f2fd;
+            border: 2px solid var(--accent-color);
+        }
+
+        .calendar-day.event::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-events {
+            flex-grow: 1;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .event-modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .event-form {
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .schedule-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .schedule-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .schedule-container {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-grid, .calendar-weekdays {
+                grid-template-columns: repeat(7, minmax(40px, 1fr));
+            }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .day-number {
+                font-size: 0.9rem;
+            }
+
+            .day-events {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .subject-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .subject-actions {
+                align-self: flex-end;
+            }
+
+            .calendar-nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Студ<span>берри</span></div>
+        
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="schedule.html" class="active">Расписание</a>
+            <a href="grades.html">Оценки</a>
+            <a href="subjects.html">Предметы</a>
+            <a href="resources.html">Ресурсы</a>
+            <a href="profile.html">Профиль</a>
+        </nav>
+        
+        <button class="auth-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            Выйти
+        </button>
+        
+        <div class="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="schedule-header">
+            <h1>Расписание</h1>
+            <div class="schedule-nav">
+                <button class="btn btn-primary" id="currentWeekBtn">Текущая неделя</button>
+                <button class="btn btn-outline" id="nextWeekBtn">Следующая неделя</button>
+                <button class="btn btn-primary" id="addEventBtn"><i class="fas fa-plus"></i> Добавить</button>
+            </div>
+        </div>
+
+        <div class="schedule-container">
+            <div class="day-card">
+                <h2>Понедельник</h2>
+                <ul class="subject-list">
+                    <li class="subject-item">
+                        <span class="subject-time">09:00-10:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Анатомия</div>
+                            <div class="subject-teacher">Преподаватель: Ляучево А.В.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="subject-item">
+                        <span class="subject-time">11:00-12:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Биология</div>
+                            <div class="subject-teacher">Преподаватель: Иванова М.П.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="day-card">
+                <h2>Вторник</h2>
+                <ul class="subject-list">
+                    <li class="subject-item">
+                        <span class="subject-time">10:00-11:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Гистология</div>
+                            <div class="subject-teacher">Преподаватель: Смирнов В.К.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
+                <div class="deadline">
+                    <h3>Дедлайн</h3>
+                    <p>Отработка по гистологии до 8 мая</p>
+                    <button class="btn btn-outline" style="margin-top: 0.5rem;">Отметить выполненным</button>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <h2>Среда</h2>
+                <ul class="subject-list">
+                    <li class="subject-item">
+                        <span class="subject-time">14:00-15:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Физика</div>
+                            <div class="subject-teacher">Преподаватель: Петров С.Н.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="day-card">
+                <h2>Четверг</h2>
+                <div class="exam-notice">
+                    <h3>Экзамены</h3>
+                    <p>Подготовка к экзаменационной сессии</p>
+                    <button class="btn btn-primary" style="margin-top: 0.5rem;">Добавить в календарь</button>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <h2>Пятница</h2>
+                <ul class="subject-list">
+                    <li class="subject-item">
+                        <span class="subject-time">09:00-10:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Биохимия</div>
+                            <div class="subject-teacher">Преподаватель: Кузнецова Е.В.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="subject-item">
+                        <span class="subject-time">11:00-12:30</span>
+                        <div class="subject-info">
+                            <div class="subject-name">Латинский язык</div>
+                            <div class="subject-teacher">Преподаватель: Сидорова О.И.</div>
+                        </div>
+                        <div class="subject-actions">
+                            <button class="action-btn" title="Детали"><i class="fas fa-info-circle"></i></button>
+                            <button class="action-btn" title="Редактировать"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn" title="Удалить"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="calendar">
+            <div class="calendar-header">
+                <div class="calendar-title">Май 2025</div>
+                <div class="calendar-nav">
+                    <button class="btn btn-outline" id="prevMonthBtn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="btn btn-outline" id="nextMonthBtn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="calendar-weekdays">
+                <div>Пн</div>
+                <div>Вт</div>
+                <div>Ср</div>
+                <div>Чт</div>
+                <div>Пт</div>
+                <div>Сб</div>
+                <div>Вс</div>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day">1</div>
+                <div class="calendar-day">2</div>
+                <div class="calendar-day">3</div>
+                <div class="calendar-day">4</div>
+                
+                <div class="calendar-day">5</div>
+                <div class="calendar-day">6</div>
+                <div class="calendar-day">7</div>
+                <div class="calendar-day event">8
+                    <div class="day-events">Отработка по гистологии</div>
+                </div>
+                <div class="calendar-day">9</div>
+                <div class="calendar-day">10</div>
+                <div class="calendar-day">11</div>
+                
+                <div class="calendar-day">12</div>
+                <div class="calendar-day today">13
+                    <div class="day-events">Дедлайн по физре</div>
+                </div>
+                <div class="calendar-day">14</div>
+                <div class="calendar-day">15</div>
+                <div class="calendar-day">16</div>
+                <div class="calendar-day">17</div>
+                <div class="calendar-day">18</div>
+                
+                <div class="calendar-day">19</div>
+                <div class="calendar-day">20</div>
+                <div class="calendar-day">21</div>
+                <div class="calendar-day">22</div>
+                <div class="calendar-day">23</div>
+                <div class="calendar-day">24</div>
+                <div class="calendar-day">25</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления события -->
+    <div class="event-modal" id="eventModal">
+        <div class="event-modal-content">
+            <span class="close-modal" id="closeEventModal">&times;</span>
+            <h2>Добавить событие</h2>
+            
+            <form class="event-form" id="eventForm">
+                <div class="form-group">
+                    <label for="eventTitle">Название</label>
+                    <input type="text" id="eventTitle" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDate">Дата</label>
+                    <input type="date" id="eventDate" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventTime">Время</label>
+                    <input type="time" id="eventTime" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventType">Тип</label>
+                    <select id="eventType" class="form-control">
+                        <option value="lecture">Лекция</option>
+                        <option value="practice">Практика</option>
+                        <option value="exam">Экзамен</option>
+                        <option value="deadline">Дедлайн</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDescription">Описание</label>
+                    <textarea id="eventDescription" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancelEventBtn">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Бургер-меню
+        document.querySelector('.burger-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('mobile-visible');
+        });
+
+        // Выход из профиля
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Переключение между неделями
+        document.getElementById('currentWeekBtn').addEventListener('click', function() {
+            alert('Показана текущая неделя');
+            this.classList.add('btn-primary');
+            this.classList.remove('btn-outline');
+            document.getElementById('nextWeekBtn').classList.remove('btn-primary');
+            document.getElementById('nextWeekBtn').classList.add('btn-outline');
+        });
+
+        document.getElementById('nextWeekBtn').addEventListener('click', function() {
+            alert('Показана следующая неделя');
+            this.classList.add('btn-primary');
+            this.classList.remove('btn-outline');
+            document.getElementById('currentWeekBtn').classList.remove('btn-primary');
+            document.getElementById('currentWeekBtn').classList.add('btn-outline');
+        });
+
+        // Управление календарем
+        document.getElementById('prevMonthBtn').addEventListener('click', function() {
+            alert('Показан предыдущий месяц');
+        });
+
+        document.getElementById('nextMonthBtn').addEventListener('click', function() {
+            alert('Показан следующий месяц');
+        });
+
+        // Модальное окно добавления события
+        const eventModal = document.getElementById('eventModal');
+        const addEventBtn = document.getElementById('addEventBtn');
+        const closeEventModalBtn = document.getElementById('closeEventModal');
+        const cancelEventBtn = document.getElementById('cancelEventBtn');
+
+        addEventBtn.addEventListener('click', function() {
+            eventModal.style.display = 'block';
+        });
+
+        closeEventModalBtn.addEventListener('click', function() {
+            eventModal.style.display = 'none';
+        });
+
+        cancelEventBtn.addEventListener('click', function() {
+            eventModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === eventModal) {
+                eventModal.style.display = 'none';
+            }
+        });
+
+        // Обработка формы события
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value;
+            const type = document.getElementById('eventType').value;
+            const description = document.getElementById('eventDescription').value;
+            
+            console.log('Событие добавлено:', { title, date, time, type, description });
+            alert('Событие успешно добавлено!');
+            eventModal.style.display = 'none';
+            this.reset();
+        });
+
+        // Обработка кликов по дням календаря
+        document.querySelectorAll('.calendar-day:not(.empty)').forEach(day => {
+            day.addEventListener('click', function() {
+                const dayNumber = this.textContent.trim();
+                alert('Выбран день: ' + dayNumber + ' мая');
+            });
+        });
+
+        // Обработка действий с предметами
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const action = this.querySelector('i').className;
+                const subjectItem = this.closest('.subject-item');
+                const subjectName = subjectItem.querySelector('.subject-name').textContent;
+                
+                if (action.includes('fa-info-circle')) {
+                    alert('Детали предмета: ' + subjectName);
+                } else if (action.includes('fa-edit')) {
+                    alert('Редактирование предмета: ' + subjectName);
+                } else if (action.includes('fa-trash')) {
+                    if (confirm('Удалить предмет ' + subjectName + '?')) {
+                        subjectItem.remove();
+                    }
+                }
+            });
+        });
+
+        // Обработка кнопки "Отметить выполненным"
+        document.querySelector('.deadline .btn-outline').addEventListener('click', function() {
+            this.textContent = 'Выполнено ✓';
+            this.classList.remove('btn-outline');
+            this.classList.add('btn-primary');
+            this.style.backgroundColor = '#4caf50';
+            this.closest('.deadline').style.backgroundColor = '#e8f5e9';
+            this.closest('.deadline').style.borderLeftColor = '#4caf50';
+        });
+
+        // Обработка кнопки "Добавить в календарь"
+        document.querySelector('.exam-notice .btn-primary').addEventListener('click', function() {
+            alert('Экзамены добавлены в ваш календарь');
+            this.textContent = 'Добавлено ✓';
+            this.style.backgroundColor = '#4caf50';
+        });
+    </script>
+</body>
+</html>

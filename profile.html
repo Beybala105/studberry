@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | Студберри</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .auth-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Стили для страницы профиля */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            margin-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .profile-university {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .about-text {
+            background-color: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.7;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .subject-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .subject-info {
+            flex-grow: 1;
+        }
+
+        .subject-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .subject-grade {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-item {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .resource-info {
+            flex-grow: 1;
+        }
+
+        .resource-title {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .resource-type {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .edit-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .edit-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .auth-switch {
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .profile-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .subjects-grid, .resources-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Студ<span>берри</span></div>
+        
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="schedule.html">Расписание</a>
+            <a href="grades.html">Оценки</a>
+            <a href="subjects.html">Предметы</a>
+            <a href="resources.html">Ресурсы</a>
+            <a href="profile.html" class="active">Профиль</a>
+        </nav>
+        
+        <button class="auth-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            Выйти
+        </button>
+        
+        <div class="burger-menu">
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+            <div class="burger-line"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-header">
+            <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Аватар" class="profile-avatar">
+            <h1 class="profile-name">Иван Петров</h1>
+            <div class="profile-university">
+                <i class="fas fa-university"></i>
+                <span>СЗГМУ им. И.И. Мечникова, 2 курс</span>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-value">4.3</div>
+                    <div class="stat-label">Средний балл</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Подписчика</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Подписки</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">87</div>
+                    <div class="stat-label">Ресурса</div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn btn-primary" id="editProfileBtn">Редактировать профиль</button>
+                <button class="btn btn-outline" id="shareProfileBtn">Поделиться профилем</button>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> О себе</h2>
+            <div class="about-text">
+                <p>Студент 2 курса медицинского университета. Увлекаюсь анатомией и биохимией. Создаю учебные материалы и делюсь ими с другими студентами.</p>
+                <p>В свободное время занимаюсь спортом и читаю научную литературу.</p>
+                <button class="edit-btn" id="editAboutBtn"><i class="fas fa-edit"></i> Редактировать</button>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title"><i class="fas fa-book-open"></i> Мои предметы</h2>
+            <div class="subjects-grid">
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-brain"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Анатомия</div>
+                        <div class="subject-grade">Средний балл: 4.25</div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-dna"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Биология</div>
+                        <div class="subject-grade">Средний балл: 4.25</div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-flask"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Биохимия</div>
+                        <div class="subject-grade">Средний балл: 4.75</div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-atom"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Физика</div>
+                        <div class="subject-grade">Средний балл: 4.25</div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-language"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Латинский</div>
+                        <div class="subject-grade">Средний балл: 3.5</div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-icon"><i class="fas fa-microscope"></i></div>
+                    <div class="subject-info">
+                        <div class="subject-name">Гистология</div>
+                        <div class="subject-grade">Нет оценок</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title"><i class="fas fa-star"></i> Популярные ресурсы</h2>
+            <div class="resources-list">
+                <div class="resource-item">
+                    <div class="resource-icon"><i class="fas fa-video"></i></div>
+                    <div class="resource-info">
+                        <div class="resource-title">Кости туловища</div>
+                        <div class="resource-type">Видео • 1.2K просмотров</div>
+                    </div>
+                    <button class="edit-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon"><i class="fas fa-clone"></i></div>
+                    <div class="resource-info">
+                        <div class="resource-title">Мышцы спины</div>
+                        <div class="resource-type">Карточки • 856 изучений</div>
+                    </div>
+                    <button class="edit-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="resource-info">
+                        <div class="resource-title">Тест по анатомии</div>
+                        <div class="resource-type">Тест • 345 прохождений</div>
+                    </div>
+                    <button class="edit-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="resource-info">
+                        <div class="resource-title">Конспект по биохимии</div>
+                        <div class="resource-type">Файл • 289 загрузок</div>
+                    </div>
+                    <button class="edit-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button class="btn btn-outline" id="showAllResourcesBtn">Показать все ресурсы</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно входа/регистрации -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeAuthModal">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Вход / Регистрация</h2>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Вход</div>
+                <div class="auth-tab" data-tab="register">Регистрация</div>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Пароль</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Войти</button>
+                </form>
+                
+                <div class="auth-footer">
+                    Нет аккаунта? <span class="auth-switch" data-tab="register">Зарегистрируйтесь</span>
+                </div>
+            </div>
+            
+            <div class="auth-form" id="registerForm">
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label for="registerName">Имя</label>
+                        <input type="text" id="registerName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Пароль</label>
+                        <input type="password" id="registerPassword" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Подтвердите пароль</label>
+                        <input type="password" id="registerConfirmPassword" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Зарегистрироваться</button>
+                </form>
+                
+                <div class="auth-footer">
+                    Уже есть аккаунт? <span class="auth-switch" data-tab="login">Войдите</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Бургер-меню
+        document.querySelector('.burger-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('mobile-visible');
+        });
+
+        // Выход из профиля
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Редактирование профиля
+        document.getElementById('editProfileBtn').addEventListener('click', function() {
+            alert('Редактирование профиля будет доступно в следующей версии');
+        });
+
+        // Поделиться профилем
+        document.getElementById('shareProfileBtn').addEventListener('click', function() {
+            alert('Ссылка на профиль скопирована в буфер обмена');
+        });
+
+        // Редактирование информации "О себе"
+        document.getElementById('editAboutBtn').addEventListener('click', function() {
+            const aboutText = this.parentElement.querySelector('p');
+            const newText = prompt('Введите новый текст о себе:', aboutText.textContent);
+            if (newText !== null) {
+                aboutText.textContent = newText;
+            }
+        });
+
+        // Показать все ресурсы
+        document.getElementById('showAllResourcesBtn').addEventListener('click', function() {
+            alert('Открыта страница со всеми ресурсами');
+            window.location.href = 'resources.html';
+        });
+
+        // Обработка кнопок с троеточием
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const resourceTitle = this.closest('.resource-item').querySelector('.resource-title').textContent;
+                alert('Открыты действия для ресурса: ' + resourceTitle);
+            });
+        });
+
+        // Модальное окно входа/регистрации
+        const authModal = document.getElementById('authModal');
+        const closeAuthModalBtn = document.getElementById('closeAuthModal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const authSwitches = document.querySelectorAll('.auth-switch');
+
+        closeAuthModalBtn.addEventListener('click', function() {
+            authModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+
+        // Переключение между вкладками входа и регистрации
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Удаляем активный класс у всех вкладок и форм
+                authTabs.forEach(t => t.classList.remove('active'));
+                authForms.forEach(f => f.classList.remove('active'));
+                
+                // Добавляем активный класс текущей вкладке и форме
+                this.classList.add('active');
+                document.getElementById(tabId + 'Form').classList.add('active');
+            });
+        });
+
+        // Переключение между формами через ссылки
+        authSwitches.forEach(switcher => {
+            switcher.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Удаляем активный класс у всех вкладок и форм
+                authTabs.forEach(t => t.classList.remove('active'));
+                authForms.forEach(f => f.classList.remove('active'));
+                
+                // Добавляем активный класс выбранной вкладке и форме
+                document.querySelector(`.auth-tab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId + 'Form').classList.add('active');
+            });
+        });
+
+        // Обработка формы входа
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Здесь должна быть логика входа
+            console.log('Вход:', { email, password });
+            
+            // После успешного входа:
+            alert('Вход выполнен успешно!');
+            authModal.style.display = 'none';
+            // Обновляем интерфейс для вошедшего пользователя
+            document.getElementById('logoutBtn').style.display = 'block';
+        });
+
+        // Обработка формы регистрации
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают!');
+                return;
+            }
+            
+            // Здесь должна быть логика регистрации
+            console.log('Регистрация:', { name, email, password });
+            
+            // После успешной регистрации:
+            alert('Регистрация завершена успешно! Теперь вы можете войти.');
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+        });
+    </script>
+</body>
+</html>
